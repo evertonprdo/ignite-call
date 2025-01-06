@@ -1,5 +1,6 @@
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { ArrowRight } from '@phosphor-icons/react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { Button, Checkbox, Heading, MultiStep, Text } from '@ignite-ui/react'
@@ -16,7 +17,9 @@ import {
 } from './styles'
 
 import { getWeekDays } from '@/utils/get-week-days'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { convertTimeStringToMinutes } from '@/utils/convert-time-string-to-minutes'
+import { api } from '@/lib/axios'
+import { useRouter } from 'next/router'
 
 const timeIntervalsFormSchema = z.object({
    intervals: z
@@ -34,10 +37,29 @@ const timeIntervalsFormSchema = z.object({
       )
       .refine((intervals) => intervals.length > 0, {
          message: 'Você precisa selecionar pelo menos um dia da semana!',
-      }),
+      })
+      .transform((intervals) =>
+         intervals.map((interval) => ({
+            weekDay: interval.weekDay,
+            startTimeInMinutes: convertTimeStringToMinutes(interval.startTime),
+            endTimeInMinutes: convertTimeStringToMinutes(interval.endTime),
+         })),
+      )
+      .refine(
+         (intervals) =>
+            intervals.every(
+               (interval) =>
+                  interval.endTimeInMinutes - 60 >= interval.startTimeInMinutes,
+            ),
+         {
+            message:
+               'O horário de término deve ser pelo menos 1h distante do inicio',
+         },
+      ),
 })
 
-type TimeIntervalsFormSchema = z.infer<typeof timeIntervalsFormSchema>
+type TimeIntervalsFormInput = z.input<typeof timeIntervalsFormSchema>
+type TimeIntervalsFormOutput = z.infer<typeof timeIntervalsFormSchema>
 
 export default function TimeIntervals() {
    const {
@@ -46,7 +68,7 @@ export default function TimeIntervals() {
       handleSubmit,
       formState: { isSubmitting, errors },
       watch,
-   } = useForm({
+   } = useForm<TimeIntervalsFormInput, unknown, TimeIntervalsFormOutput>({
       defaultValues: {
          intervals: [
             {
@@ -96,6 +118,7 @@ export default function TimeIntervals() {
       resolver: zodResolver(timeIntervalsFormSchema),
    })
 
+   const router = useRouter()
    const weekDays = getWeekDays()
 
    const { fields } = useFieldArray({
@@ -105,8 +128,9 @@ export default function TimeIntervals() {
 
    const intervals = watch('intervals')
 
-   async function handleSetTimeIntervals(data: TimeIntervalsFormSchema) {
-      console.log(data)
+   async function handleSetTimeIntervals(data: TimeIntervalsFormOutput) {
+      await api.post('/users/time-intervals', data)
+      await router.push('/register/update-profile')
    }
 
    return (
