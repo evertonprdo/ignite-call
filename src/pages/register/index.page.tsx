@@ -7,10 +7,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
 
 import { ArrowRight } from '@phosphor-icons/react'
-import { Button, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react'
+import { Button, Heading, MultiStep, Text } from '@ignite-ui/react'
 
 import { api } from '@/lib/axios'
 import { Container, Form, FormError, Header } from './styles'
+import { TextInput } from '@/components/TextInput'
 
 const registerFormSchema = z.object({
    username: z
@@ -85,9 +86,6 @@ export default function Register() {
                   <TextInput
                      prefix="ignite.com/"
                      placeholder="seu-usuario"
-                     crossOrigin={undefined}
-                     onPointerEnterCapture={undefined}
-                     onPointerLeaveCapture={undefined}
                      {...register('username')}
                   />
 
@@ -100,9 +98,6 @@ export default function Register() {
                   <Text size="sm">Nome de completo</Text>
                   <TextInput
                      placeholder="Seu nome"
-                     crossOrigin={undefined}
-                     onPointerEnterCapture={undefined}
-                     onPointerLeaveCapture={undefined}
                      {...register('name')}
                   />
 

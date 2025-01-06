@@ -1,4 +1,4 @@
-import { Button, Text, TextInput } from '@ignite-ui/react'
+import { Button, Text } from '@ignite-ui/react'
 import { ArrowRight } from '@phosphor-icons/react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -6,6 +6,7 @@ import { z } from 'zod'
 
 import { Form, FormAnnotation } from './styles'
 import { useRouter } from 'next/router'
+import { TextInput } from '../TextInput'
 
 const claimUsernameFormSchema = z.object({
    username: z
@@ -46,9 +47,6 @@ export function ClaimUsernameForm() {
                size="sm"
                prefix="ignite.com/"
                placeholder="seu-usuario"
-               crossOrigin={undefined}
-               onPointerEnterCapture={undefined}
-               onPointerLeaveCapture={undefined}
                {...register('username')}
             />
             <Button
