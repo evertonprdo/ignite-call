@@ -7,11 +7,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
 
 import { ArrowRight } from '@phosphor-icons/react'
-import { Button, Heading, MultiStep, Text } from '@ignite-ui/react'
+import { Button, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react'
 
 import { api } from '@/lib/axios'
 import { Container, Form, FormError, Header } from './styles'
-import { TextInput } from '@/components/TextInput'
 
 const registerFormSchema = z.object({
    username: z

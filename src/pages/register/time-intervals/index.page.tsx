@@ -3,8 +3,14 @@ import { ArrowRight } from '@phosphor-icons/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { Button, Checkbox, Heading, MultiStep, Text } from '@ignite-ui/react'
-import { TextInput } from '@/components/TextInput'
+import {
+   Button,
+   Checkbox,
+   Heading,
+   MultiStep,
+   Text,
+   TextInput,
+} from '@ignite-ui/react'
 
 import { Container, Header } from '../styles'
 import {
