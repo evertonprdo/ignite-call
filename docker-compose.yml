@@ -1,0 +1,10 @@
+services:
+  mysql:
+    container_name: ignitecall_db
+    image: bitnami/mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=docker
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/bitnami/mysql
